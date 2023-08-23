@@ -1,8 +1,7 @@
 package repository
 
 import (
-	"tu_paquete/models" // Recuerda reemplazar "tu_paquete" con el nombre de tu paquete donde estén los modelos.
-
+	"github.com/heroku/go-getting-started/models"
 	"github.com/jinzhu/gorm"
 )
 

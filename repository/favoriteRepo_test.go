@@ -2,9 +2,12 @@ package repository_test
 
 import (
 	"testing"
-	"tu_paquete/models"
-	"github.com/jinzhu/gorm"
+
+	"github.com/heroku/go-getting-started/models"
+	"github.com/heroku/go-getting-started/repository"
+
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -21,7 +24,7 @@ func TestFavoritesRepo_Create(t *testing.T) {
 	mock.ExpectExec("INSERT INTO").WithArgs(1, "apiRef123").WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	repo := NewFavoritesRepo(gormDB)
+	repo := repository.NewFavoritesRepo(gormDB)
 
 	favorite := &models.Favorite{
 		UserID: 1,
@@ -31,5 +34,3 @@ func TestFavoritesRepo_Create(t *testing.T) {
 	err = repo.Create(favorite)
 	assert.NoError(t, err)
 }
-
-func TestFavorites
