@@ -17,7 +17,7 @@ func (s JWTTokenService) GenerateToken(email string) (string, error) {
 		"exp":   time.Now().Add(time.Minute * 5).Unix(),
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims) // ¡Cambia a HS256!
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(Scrt))
 }
 

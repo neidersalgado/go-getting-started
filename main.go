@@ -38,7 +38,7 @@ func main() {
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Error al conectar a la base de datos: %v", err)
+		log.Fatalf("Error connectin to DB: %v", err)
 	}
 
 	repo := repository.NewUserRepo(db)
@@ -54,7 +54,7 @@ func main() {
 	router.GET("/healt", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  "success",
-			"message": "Todo OK, servicio funcionando correctamente.",
+			"message": "All OK, service is running.",
 		})
 	})
 

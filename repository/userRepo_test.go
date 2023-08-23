@@ -16,7 +16,7 @@ func TestUserRepo_Create(t *testing.T) {
 	// Mock database
 	db, mock, err := sqlmock.New()
 	if err != nil {
-		t.Fatalf("Error al abrir el mock db %s", err)
+		t.Fatalf("Error open mock db %s", err)
 	}
 	defer db.Close()
 
