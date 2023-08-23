@@ -29,6 +29,10 @@ func main() {
 	router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
 
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.tmpl.html", nil)
+	})
+
 	host := os.Getenv("DB_HOST")
 	DBport := os.Getenv("DB_PORT")
 	user := os.Getenv("DB_USER")
