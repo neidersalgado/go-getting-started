@@ -8,6 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.9.0
 	github.com/heroku/x v0.0.55
 	github.com/jinzhu/gorm v1.9.16
+	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.8.4
 	gorm.io/gorm v1.25.0
 )

@@ -12,6 +12,7 @@ import (
 	"github.com/heroku/go-getting-started/repository"
 	"github.com/heroku/go-getting-started/utils"
 	_ "github.com/heroku/x/hmetrics/onload"
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
