@@ -25,5 +25,13 @@ func main() {
 		c.HTML(http.StatusOK, "index.tmpl.html", nil)
 	})
 
+	// Modificado aquí
+	router.GET("/healt", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  "success",
+			"message": "Todo OK, servicio funcionando correctamente.",
+		})
+	})
+
 	router.Run(":" + port)
 }
