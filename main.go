@@ -13,7 +13,7 @@ import (
 	"github.com/heroku/go-getting-started/utils"
 	_ "github.com/heroku/x/hmetrics/onload"
 	"github.com/joho/godotenv"
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -33,16 +33,26 @@ func main() {
 		c.HTML(http.StatusOK, "index.tmpl.html", nil)
 	})
 
-	host := os.Getenv("DB_HOST")
-	DBport := os.Getenv("DB_PORT")
-	user := os.Getenv("DB_USER")
-	pass := os.Getenv("DB_PASS")
-	dbname := os.Getenv("DB_NAME")
-
-	dsn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", host, DBport, user, dbname, pass)
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	// Cargar las variables de entorno desde el archivo .env
+	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Error connectin to DataBbase: %v", err)
+		log.Fatal("Error cargando el archivo .env")
+	}
+
+	// Obtener las credenciales de la base de datos desde las variables de entorno
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbUser := os.Getenv("DB_USER")
+	dbPass := os.Getenv("DB_PASS")
+	dbName := os.Getenv("DB_NAME")
+
+	// Crear la cadena de conexión
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
+
+	// Conectar a la base de datos
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Error conectando a la base de datos:", err)
 	}
 
 	repo := repository.NewUserRepo(db)
