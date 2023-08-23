@@ -39,7 +39,7 @@ func main() {
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Error connectin to DB: %v", err)
+		log.Fatalf("Error connectin to DataBbase: %v", err)
 	}
 
 	repo := repository.NewUserRepo(db)
@@ -65,6 +65,6 @@ func main() {
 func init() {
 	// Carga el archivo .env
 	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+		log.Fatalf("Error loading .env fil with db config: %v", err)
 	}
 }
