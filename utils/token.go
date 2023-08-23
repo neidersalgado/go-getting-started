@@ -8,18 +8,20 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func GenerateToken(email string) (string, error) {
+type JWTTokenService struct{}
+
+func (s JWTTokenService) GenerateToken(email string) (string, error) {
 	Scrt := os.Getenv("SECTRET_KEY")
 	claims := jwt.MapClaims{
 		"email": email,
 		"exp":   time.Now().Add(time.Minute * 5).Unix(),
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims) // ¡Cambia a HS256!
 	return token.SignedString([]byte(Scrt))
 }
 
-func ValidateToken(tokenstring string) (string, error) {
+func (s JWTTokenService) ValidateToken(tokenstring string) (string, error) {
 	Scrt := os.Getenv("SECTRET_KEY")
 	token, err := jwt.Parse(tokenstring, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
