@@ -2,7 +2,7 @@ package repository
 
 import (
 	"github.com/heroku/go-getting-started/models"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type UserRepo struct {
