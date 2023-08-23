@@ -7,21 +7,33 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/heroku/go-getting-started/models"
 	"github.com/heroku/go-getting-started/repository"
-	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func TestUserRepo_Create(t *testing.T) {
+	// Mock database
 	db, mock, err := sqlmock.New()
 	if err != nil {
 		t.Fatalf("Error al abrir el mock db %s", err)
 	}
 	defer db.Close()
 
-	gormDB, _ := gorm.Open("mysql", db)
+	// GORM setup with custom dialector
+	gormDB, err := gorm.Open(postgres.New(postgres.Config{
+		Conn: db,
+	}), &gorm.Config{})
 
+	if err != nil {
+		t.Fatalf("Error setting up gorm DB: %s", err)
+	}
+
+	// SQLMock expectations
 	mock.ExpectBegin()
-	mock.ExpectExec("INSERT INTO").WithArgs("TestName", "test@example.com", "testPass", "TestAddress", sqlmock.AnyArg(), "TestCity").WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectQuery(`^INSERT INTO "users" \("name","email","password","address","birthdate","city"\) VALUES \(\$1,\$2,\$3,\$4,\$5,\$6\) RETURNING "id"$`).
+		WithArgs("TestName", "test@example.com", "testPass", "TestAddress", sqlmock.AnyArg(), "TestCity").
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
 	mock.ExpectCommit()
 
 	repo := repository.NewUserRepo(gormDB)

@@ -10,14 +10,14 @@ import (
 func Authenticate() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("Authorization")
-
+		utiltoken := utils.JWTTokenService{}
 		if token == "" {
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header missing"})
 			ctx.Abort()
 			return
 		}
 
-		email, err := utils.ValidateToken(token)
+		email, err := utiltoken.ValidateToken(token)
 		if err != nil {
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 			ctx.Abort()
