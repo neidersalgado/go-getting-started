@@ -10,6 +10,6 @@ type User struct {
 	Email     string    `json:"email" gorm:"type:varchar(255);unique;not null"`
 	Password  string    `json:"password" gorm:"type:varchar(255);not null"` // El "-" evita que se serialice al enviarlo en JSON
 	Address   string    `json:"address" gorm:"type:varchar(255);not null"`
-	Birthdate time.Time `json:"birthdate" gorm:"type:date;not null"`
+	Birthdate time.Time `json:"birthdate" gorm:"type:datetime"`
 	City      string    `json:"city" gorm:"type:varchar(255);not null"`
 }

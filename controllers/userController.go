@@ -68,18 +68,18 @@ func (uc *UserController) UpdateUser(ctx *gin.Context) {
 	emailFromToken, err := uc.TokenGen.ValidateToken(token)
 
 	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token", "msg": err.Error()})
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token", "msg": err})
 		return
 	}
 
 	if emailFromToken != user.Email {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You don't have permission to update this user", "msg": err.Error()})
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You don't have permission to update this user", "msg": err})
 		return
 	}
 
 	err = uc.Repo.Update(&user)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error updating the user", "msg": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error updating the user", "msg": err})
 		return
 	}
 
