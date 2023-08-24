@@ -43,7 +43,7 @@ func TestUserRepo_Create(t *testing.T) {
 		Email:     "test@example.com",
 		Password:  "testPass",
 		Address:   "TestAddress",
-		Birthdate: dateTime,
+		Birthdate: dateTime.GoString(),
 		City:      "TestCity",
 	}
 

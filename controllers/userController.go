@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -77,6 +78,14 @@ func (uc *UserController) UpdateUser(ctx *gin.Context) {
 		return
 	}
 
+	usr, err := uc.Repo.GetUserByEmail(user.Email)
+	fmt.Printf("***%v", usr)
+	if err != nil || usr.ID == 0 {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "user not found to update"})
+		return
+	}
+	user.ID = usr.ID
+	user.Password = usr.Password
 	err = uc.Repo.Update(&user)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error updating the user", "msg": err})
@@ -99,8 +108,8 @@ func (uc *UserController) Login(ctx *gin.Context) {
 	}
 
 	pwd, err := uc.Repo.GetUserByEmail(loginInfo.Email)
-	if err != nil || pwd.Email != loginInfo.Email {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect email or password", "msg": loginInfo, "err": err.Error()})
+	if err != nil || pwd.Password != loginInfo.Password {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect email or password"})
 		return
 	}
 

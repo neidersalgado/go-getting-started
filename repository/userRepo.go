@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/heroku/go-getting-started/models"
 	"gorm.io/gorm"
 )
@@ -21,6 +23,7 @@ func (repo *UserRepo) Create(user *models.User) error {
 }
 
 func (repo *UserRepo) Update(user *models.User) error {
+	fmt.Printf("user: %v", user)
 	if err := repo.DB.Save(user).Error; err != nil {
 		return err
 	}
@@ -37,7 +40,7 @@ func (repo *UserRepo) GetAll() ([]models.User, error) {
 
 func (repo *UserRepo) GetUserByEmail(email string) (*models.User, error) {
 	var user models.User
-	if err := repo.DB.Model(&models.User{}).Select("password").Where("email = ?", email).First(&user).Error; err != nil {
+	if err := repo.DB.Model(&models.User{}).Select("id,password").Where("email = ?", email).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
