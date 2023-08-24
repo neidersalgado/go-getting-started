@@ -73,7 +73,7 @@ func (uc *UserController) UpdateUser(ctx *gin.Context) {
 	}
 
 	if emailFromToken != user.Email {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You don't have permission to update this user", "msg": err})
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You don't have permission to update this user", "msg": emailFromToken, "userEmail": user.Email})
 		return
 	}
 
@@ -98,9 +98,9 @@ func (uc *UserController) Login(ctx *gin.Context) {
 		return
 	}
 
-	user, err := uc.Repo.GetUserByEmail(loginInfo.Email)
-	if err != nil || user.Password != loginInfo.Password {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect email or password", "msg": err.Error()})
+	pwd, err := uc.Repo.GetUserByEmail(loginInfo.Email)
+	if err != nil || pwd != loginInfo.Email {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect email or password", "msg": loginInfo, "err": err.Error()})
 		return
 	}
 

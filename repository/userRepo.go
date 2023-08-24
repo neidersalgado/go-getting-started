@@ -37,7 +37,7 @@ func (repo *UserRepo) GetAll() ([]models.User, error) {
 
 func (repo *UserRepo) GetUserByEmail(email string) (*models.User, error) {
 	var user models.User
-	if err := repo.DB.Where("email = ?", email).First(&user).Error; err != nil {
+	if err := repo.DB.Model(&models.User{}).Select("password").Where("email = ?", email).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
