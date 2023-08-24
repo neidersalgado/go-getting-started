@@ -42,13 +42,13 @@ func (uc *UserController) Register(ctx *gin.Context) {
 
 	err := uc.Repo.Create(&user)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error creating the user"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error creating the user", "msg": err.Error()})
 		return
 	}
 
 	token, err := uc.TokenGen.GenerateToken(user.Email)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating the token"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating the token", "msg": err.Error()})
 		return
 	}
 
@@ -68,12 +68,12 @@ func (uc *UserController) UpdateUser(ctx *gin.Context) {
 	emailFromToken, err := uc.TokenGen.ValidateToken(token)
 
 	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token", "msg": err.Error()})
 		return
 	}
 
 	if emailFromToken != user.Email {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You don't have permission to update this user"})
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You don't have permission to update this user", "msg": err.Error()})
 		return
 	}
 
@@ -100,13 +100,13 @@ func (uc *UserController) Login(ctx *gin.Context) {
 
 	user, err := uc.Repo.GetUserByEmail(loginInfo.Email)
 	if err != nil || user.Password != loginInfo.Password {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect email or password"})
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect email or password", "msg": err.Error()})
 		return
 	}
 
 	token, err := uc.TokenGen.GenerateToken(user.Email)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating the token"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating the token", "msg": err.Error()})
 		return
 	}
 
