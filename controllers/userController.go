@@ -79,7 +79,7 @@ func (uc *UserController) UpdateUser(ctx *gin.Context) {
 
 	err = uc.Repo.Update(&user)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error updating the user"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error updating the user", "msg": err.Error()})
 		return
 	}
 
