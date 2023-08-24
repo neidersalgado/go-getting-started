@@ -99,12 +99,12 @@ func (uc *UserController) Login(ctx *gin.Context) {
 	}
 
 	pwd, err := uc.Repo.GetUserByEmail(loginInfo.Email)
-	if err != nil || pwd != loginInfo.Email {
+	if err != nil || pwd.Email != loginInfo.Email {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect email or password", "msg": loginInfo, "err": err.Error()})
 		return
 	}
 
-	token, err := uc.TokenGen.GenerateToken(user.Email)
+	token, err := uc.TokenGen.GenerateToken(loginInfo.Email)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating the token", "msg": err.Error()})
 		return
